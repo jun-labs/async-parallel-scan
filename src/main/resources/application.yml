@@ -1,0 +1,60 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO}
+    properties:
+      hibernate:
+        generate_statistics: true
+        dialect: ${DIALECT}
+        default_batch_fetch_size: ${DEFAULT_BATCH_FETCH_SIZE}
+        show_sql: false
+        format_sql: false
+    open-in-view: false
+    show-sql: false
+
+  datasource:
+    driver-class-name: ${DRIVER_CLASS_NAME}
+    url: ${URL}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    max-lifetime: ${MAX_LIFETIME}
+    hikari:
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
+  tomcat:
+    connection-timeout: ${CONNECTION_TIMEOUT}
+    threads:
+      max: ${MAX}
+      min-spare: ${MIN_SPARE}
+    max-connections: ${MAX_CONNECTIONS}
+    accept-count: ${ACCEPT_COUNT}
+  data:
+    redis:
+      host: ${HOST}
+      port: ${PORT}
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
+  port: ${PORT}
+
+management:
+  server:
+    port: ${PORT}
+    endpoint:
+      health:
+        show-details: always
+  endpoints:
+    prometheus:
+      enable: true
+    web:
+      exposure:
+        include: ${INCLUDE}
+
+actuator:
+  info:
+    contact:
+      email: ${EMAIL}
+      phone: ${PHONE}
+  user: ${USER}
+  password: ${PASSWORD}
+  role-name: ${ROLE_NAME}
