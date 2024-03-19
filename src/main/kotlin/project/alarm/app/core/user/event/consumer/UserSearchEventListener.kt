@@ -20,7 +20,20 @@ class UserSearchEventListener(
         queueNames = ["\${application.amazon.sqs.user-search.name}"],
         maxMessagesPerPoll = "10"
     )
-    fun consumeEvent(@Payload message: String) {
+    fun consume(@Payload message: String) {
+        publishEvent(message)
+    }
+
+    @Async("asyncThreadPool")
+    @SqsListener(
+        queueNames = ["\${application.amazon.sqs.user-search.dead-letter-name}"],
+        maxMessagesPerPoll = "10"
+    )
+    fun consumeDeadLetter(@Payload message: String) {
+        publishEvent(message)
+    }
+
+    private fun publishEvent(message: String) {
         val snsMessage: Map<String, Any> = objectMapper.readValue(message)
         val strMessage = snsMessage["Message"]?.toString() ?: return
         if (strMessage.isBlank()) {

@@ -11,11 +11,24 @@ import project.alarm.app.core.user.event.UserSearchEvent
 class IndexSegmentationEventListener(
     private val eventPublisher: EventPublisher<UserSearchEvent>
 ) {
+
     @SqsListener(
         queueNames = ["\${application.amazon.sqs.event-divider.name}"],
         maxMessagesPerPoll = "10"
     )
     fun consume(@Payload event: IndexDivisionEvent) {
+        publishEvent(event)
+    }
+
+    @SqsListener(
+        queueNames = ["\${application.amazon.sqs.event-divider.dead-letter-name}"],
+        maxMessagesPerPoll = "10"
+    )
+    fun consumeDeadLetter(@Payload event: IndexDivisionEvent) {
+        publishEvent(event)
+    }
+
+    private fun publishEvent(event: IndexDivisionEvent) {
         val ranges = event.startIdx..event.endIdx
         ranges.chunked(1_000)
             .forEach { chunk ->
