@@ -12,10 +12,6 @@ repositories {
     mavenCentral()
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-}
-
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -47,10 +43,8 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(kotlin("test-junit5"))
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter:1.19.3")
-    testImplementation("org.testcontainers:testcontainers:1.15.3")
     testImplementation("org.testcontainers:localstack:1.15.3")
 }
 
@@ -63,6 +57,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    jvmArgs("-Xmx2048m", "-XX:+HeapDumpOnOutOfMemoryError")
 }
 
 allOpen {
