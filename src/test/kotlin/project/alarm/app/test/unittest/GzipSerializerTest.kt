@@ -1,7 +1,7 @@
 package project.alarm.app.test.unittest
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.kotest.core.spec.DisplayName
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import project.alarm.app.common.configuration.redis.GzipSerializer
 import project.alarm.app.logger
