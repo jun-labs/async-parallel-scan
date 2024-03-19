@@ -77,6 +77,10 @@ application:
       event-divider:
         name: ${QUEUE_NAME}
         topic: ${TOPIC}
+        dead-letter-name: ${DEAD_LETTER_NAME}
+        dead-letter-topic: ${DEAD_LETTER_TOPIC}
       user-search:
         name: ${QUEUE_NAME}
         topic: ${TOPIC}
+        dead-letter-name: ${DEAD_LETTER_NAME}
+        dead-letter-topic: ${DEAD_LETTER_TOPIC}
