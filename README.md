@@ -60,3 +60,49 @@
 이후 각 태스크를 `비동기를 통한 병렬로 처리`합니다.
 
 ![image](image/async-parallel.png)
+
+<br/><br/><br/><br/><br/><br/>
+
+## 3. 결과
+
+2,000만 건 처리 시 1분 ~ 1분 45초. 
+
+```shell
+# 약, 1분 31초(91.16)
+127.0.0.1:6379> get time::string::startTime
+"1710619193857"
+127.0.0.1:6379> get time::string::endTime
+"1710619285018"
+```
+
+```shell
+# 약 1분 26초(86.45)
+127.0.0.1:6379> get time::string::startTime
+"1710619455453"
+127.0.0.1:6379> get time::string::endTime
+"1710619541899"
+```
+
+```shell
+# 약 1분 38초(98.73)
+127.0.0.1:6379> get time::string::startTime
+"1710619665364"
+127.0.0.1:6379> get time::string::endTime
+"1710619764089"
+```
+
+<br/><br/><br/><br/><br/><br/>
+
+## 4. 한계
+
+태스크 실행 중 새로운 데이터가 추가 됐을 때, 이를 처리할 수 있는 방안이 없습니다. 예를 들어, 2,000만 사용자에게 알림을 발송하는 도중 새로운 사용자가 가입을 한다면 이를 대처할 방법이 없습니다. 따라서
+모든 로직이 끝난 후, 새로 추가된 사용자들은 별도의 로직으로 처리해줘야 합니다.
+
+```kotlin
+interface UserRepository : JpaRepository<User, Long> {
+    @Query("SELECT u FROM user u WHERE u.id > maxUserId")
+    fun findByIdOver(maxUserId: Long): List<User>
+}
+```
+
+> 또한 이 외에도 쓰레드 풀 개수 설정, 커넥션 관리, 모니터링 등의 추가 이슈가 있습니다. 상세 내용은 블로그를 참조해주세요.
