@@ -1,17 +1,17 @@
 package project.alarm.app.core.alarm.facade
 
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import project.alarm.app.common.utils.IndexRangeDivider.Companion.calculateEndIdx
 import project.alarm.app.common.utils.IndexRangeDivider.Companion.calculateStartIdx
 import project.alarm.app.core.alarm.event.IndexDivisionEvent
+import project.alarm.app.core.event.EventPublisher
 import project.alarm.app.core.user.application.UserSearchUseCase
 
 @Component
 class AlarmFacade(
     private val userSearchUseCase: UserSearchUseCase,
-    private val eventPublisher: ApplicationEventPublisher
+    private val eventPublisher: EventPublisher<IndexDivisionEvent>
 ) {
 
     @Async(value = "asyncThreadPool")

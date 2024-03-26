@@ -1,4 +1,7 @@
 spring:
+  sql:
+    init:
+      mode: always
   jpa:
     hibernate:
       ddl-auto: ${DDL_AUTO}
@@ -58,3 +61,25 @@ actuator:
   user: ${USER}
   password: ${PASSWORD}
   role-name: ${ROLE_NAME}
+
+cloud:
+  aws:
+    region:
+      static: ${REGION}
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    sns:
+      endpoint: ${SNS_ENDPOINT}
+    sqs:
+      endpoint: ${SQS_ENDPOINT}
+
+application:
+  amazon:
+    sqs:
+      event-divider:
+        name: ${QUEUE_NAME}
+        topic: ${TOPIC}
+      user-search:
+        name: ${QUEUE_NAME}
+        topic: ${TOPIC}

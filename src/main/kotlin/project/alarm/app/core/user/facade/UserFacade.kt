@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import project.alarm.app.core.alarm.event.AlarmSendingEvent
+import project.alarm.app.core.event.EventPublisher
 import project.alarm.app.core.user.application.UserSearchUseCase
 
 @Component
@@ -21,9 +22,12 @@ class UserFacade(
     }
 
     @Async(value = "asyncThreadPool")
-    fun publishEvent(chunk: List<Long>) {
-        val userIds = userSearchUseCase.findByIdIn(chunk.first(), chunk.last())
-        val event = AlarmSendingEvent(userIds)
+    fun publishEvent(userIds: List<Long>) {
+        if (userIds.isEmpty()) {
+            return
+        }
+        val findUserIds = userSearchUseCase.findByIdIn(userIds.first(), userIds.last())
+        val event = AlarmSendingEvent(findUserIds)
         eventPublisher.publishEvent(event)
     }
 }

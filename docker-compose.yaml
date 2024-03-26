@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  mysql:
+    image: mysql:latest
+    platform: linux/arm64
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ}
+    restart: always
+    env_file:
+      - .env
+    container_name: mysql8.0-container
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=1000
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs
+      - AWS_DEFAULT_REGION=ap-northeast-2
+
+  initializer:
+    image: amazon/aws-cli
+    depends_on:
+      - localstack
+    environment:
+      - AWS_DEFAULT_REGION=ap-northeast-2
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    command: >
+      /bin/sh -c "
+        while ! nc -z localstack 4566; do
+          sleep 1;
+        done;
+        echo LocalStack started;
+        aws --endpoint-url=http://localstack:4566 sns create-topic --name ${EVENT_DIVIDER_TOPIC};
+        aws --endpoint-url=http://localstack:4566 sns create-topic --name ${USER_SEARCH_EVENT_TOPIC};
+        aws --endpoint-url=http://localstack:4566 sqs create-queue --queue-name ${EVENT_DIVIDER_QUEUE};
+        aws --endpoint-url=http://localstack:4566 sqs create-queue --queue-name ${USER_SEARCH_EVENT_QUEUE};
+      "

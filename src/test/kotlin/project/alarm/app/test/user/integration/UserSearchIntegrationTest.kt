@@ -1,14 +1,12 @@
 package project.alarm.app.test.user.integration
 
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import project.alarm.app.core.user.application.UserSaveUseCase
 import project.alarm.app.core.user.application.UserSearchUseCase
 import project.alarm.app.test.IntegrationTestBase
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @DisplayName("[IntegrationTest] 사용자 조회 테스트")
 class UserSearchIntegrationTest : IntegrationTestBase() {
